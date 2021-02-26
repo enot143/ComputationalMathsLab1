@@ -21,7 +21,6 @@ public class Matrix {
     private double[][] a;   //коэффициенты матрицы
     private double[] b;     //вектор свободных членов
     private double[] x;    //начальные приближения = ответ
-    //TODO: заменить d на вектор
     private double[] d = new double[M];     //вектор погрешностей
     private double eps;     //заданная погрешность
     private double maxD = 0;//максимальная выч. погрешность
@@ -63,7 +62,6 @@ public class Matrix {
     }
 
     /* Метод для проверки диагонального преобладания */
-    //TODO: zamena - null ?
     public boolean isConverge(double[][] array) {
         boolean isConv = false;
         double[][] zamena = null;
@@ -88,7 +86,6 @@ public class Matrix {
             for (int j = 0; j < n; j++) {
                 sum = sum + abs(res[i][j]);
             }
-            //System.out.println("сумма = " + sum + " ; модуль = " + abs(res[i][i]));
             if (abs(res[i][i]) < sum) {
                 return false;
             }
@@ -135,16 +132,4 @@ public class Matrix {
             System.out.println();
         }
     }
-    //    private static void print(double[][] res) {
-//        if (res != null) {
-//            int n = 3;
-//            for (int i = 0; i < n; i++) {
-//                for (int j = 0; j < n; j++) {
-//                    System.out.print(res[i][j] + " ");
-//                }
-//                System.out.println();
-//            }
-//        }
-//        System.out.println();
-//    }
 }

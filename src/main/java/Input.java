@@ -93,12 +93,6 @@ public class Input {
         eps = Double.parseDouble(br.readLine());
     }
 
-//    private void inputB(BufferedReader br) throws IOException {
-//        String[] matrixB = br.readLine().split(" ");
-//        for (int i = 0; i < dimension; i++) {
-//            b[i] = Double.parseDouble(matrixB[i]);
-//        }
-//    }
 
     private void inputCoefficient(BufferedReader br) throws IOException {
         for (int i = 0; i < dimension; i++) {
