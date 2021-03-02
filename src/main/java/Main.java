@@ -5,7 +5,7 @@ public class Main {
         Input input = new Input();
         Matrix matrix = input.getMatrix();
         if (matrix != null){
-            matrix.startSeidel();
+            matrix.startMethod();
         }
     }
 }

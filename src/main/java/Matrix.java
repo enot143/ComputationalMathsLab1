@@ -1,4 +1,6 @@
 
+import java.util.Arrays;
+
 import static java.lang.Math.abs;
 
 public class Matrix {
@@ -12,6 +14,7 @@ public class Matrix {
         for (int i = 0; i < n; i++) {
             x[i] = 0;
         }
+        System.out.println("Вы ввели матрицу: ");
         getMatrix();
     }
 
@@ -28,73 +31,53 @@ public class Matrix {
     private double s;       //промежуточная переменная - сумма
     private double x_I;     //x_I_k
 
-    /* Метод Гаусса-Зейделя */
-    public void startSeidel() {
+    public void startMethod() {
         if (isConverge(a)) {
-            maxD = 0;
-            for (int i = 0; i < n; i++) {
-                s = 0;
-                for (int j = 0; j < i - 1; j++) {
-                    s += a[i][j] * x[j];
-                }
-                for (int j = i + 1; j < n; j++) {
-                    s += a[i][j] * x[j];
-                }
-                x_I = (b[i] - s) / a[i][i];
-                D = abs(x_I - x[i]);
-                if (D > maxD) maxD = D;
-                x[i] = x_I;
-            }
-            d[k - 1] = maxD;
-            if (maxD < eps) {
-                getVectorX(x);
-                getIteration(k);
-                getError(d);
-            } else if (k < M) {
-                k++;
-                startSeidel();
-            } else {
-                System.out.println("Итерации расходятся.");
-            }
-        }else{
+            startSeidel();
+        } else {
             System.out.println("Нельзя достичь диагонального преобладания.");
+        }
+    }
+
+    /* Метод Гаусса-Зейделя */
+    private void startSeidel() {
+        maxD = 0;
+        for (int i = 0; i < n; i++) {
+            s = 0;
+            for (int j = 0; j < i - 1; j++) {
+                s += a[i][j] * x[j];
+            }
+            for (int j = i + 1; j < n; j++) {
+                s += a[i][j] * x[j];
+            }
+            x_I = (b[i] - s) / a[i][i];
+            D = abs(x_I - x[i]);
+            if (D > maxD) maxD = D;
+            x[i] = x_I;
+        }
+        d[k - 1] = maxD;
+        if (maxD < eps) {
+            getVectorX(x);
+            getIteration(k);
+            getError(d);
+        } else if (k < M) {
+            k++;
+            startSeidel();
+        } else {
+            System.out.println("Итерации расходятся.");
         }
     }
 
     /* Метод для проверки диагонального преобладания */
     public boolean isConverge(double[][] array) {
-        boolean isConv = false;
-        double[][] zamena = null;
-        int i = 0;
-        PermUtil permUtil = new PermUtil(array);
-        while (!isConv && i < permUtil.getFactorial(array.length)) {
-            i++;
-            zamena = permUtil.next();
-            isConv = checkConverge(zamena);
+        Diagonal diagonal = new Diagonal(array);
+        boolean f = diagonal.findNewMatrix();
+        if (f) {
+            a = diagonal.getNewMatrix().clone();
+            System.out.println("Матрица с диагональным преобладанием:");
+            getMatrix();
         }
-        if (isConv && zamena != null){
-            a = zamena.clone();
-        }
-        return isConv;
-    }
-
-    private boolean checkConverge(double[][] res) {
-        double sum = 0;
-        boolean isStrict = false;
-        for (int i = 0; i < n; i++) {
-            sum = 0 - abs(res[i][i]);
-            for (int j = 0; j < n; j++) {
-                sum = sum + abs(res[i][j]);
-            }
-            if (abs(res[i][i]) < sum) {
-                return false;
-            }
-            else{
-                if (abs(res[i][i]) > sum)
-                    isStrict = true;
-            }
-        }
-        return isStrict;
+        return f;
     }
 
     /* Вывод вектора неизвестных x-ов */
@@ -122,7 +105,6 @@ public class Matrix {
 
     /* Вывод введенной матрицы */
     private void getMatrix() {
-        System.out.println("Вы ввели матрицу: ");
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 System.out.printf("%6.1f", a[i][j]);
